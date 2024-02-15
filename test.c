@@ -15,7 +15,7 @@ static int compare(const void* a, const void* b) {
 
 static void initRandomArray() {
 	for (int i = 0; i < ARRAY_SIZE; i++) {
-		rand_arr[i] = rand() * rand() + i;
+		rand_arr[i] = rand() * rand();
 	}
 }
 
