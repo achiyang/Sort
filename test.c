@@ -37,6 +37,7 @@ static int isSorted(int* arr) {
 int main() {
 	int t = 0;
 	clock_t start, end;
+	double rand_avg = 0, sorted_avg = 0;
 
 	initSortedArray();
 
@@ -47,26 +48,33 @@ int main() {
 		start = clock();
 		mergeSort(rand_arr, ARRAY_SIZE, sizeof(int), compare);
 		end = clock();
+		rand_avg = (rand_avg * (t - 1) + (end - start)) / t;
 
 		if (isSorted(rand_arr)) {
-			printf("%d: random_array: %d\n", t, end - start);
+			printf("random_array: %d\n", end - start);
 		}
 		else {
-			printf("%d: random_array: failed\n", t);
+			printf("random_array: failed\n");
 		}
 
 		start = clock();
 		mergeSort(sorted_arr, ARRAY_SIZE, sizeof(int), compare);
 		end = clock();
+		sorted_avg = (sorted_avg * (t - 1) + (end - start)) / t;
 
 		if (isSorted(sorted_arr)) {
-			printf("%d: sorted_array: %d\n", t, end - start);
+			printf("sorted_array: %d\n", end - start);
 		}
 		else {
-			printf("%d: sorted_array: failed\n", t);
+			printf("sorted_array: failed\n");
 			initSortedArray();
 		}
+
+		printf("\n");
 	}
+
+	printf("random_array average: %lf\n", rand_avg);
+	printf("sorted_array average: %lf\n", sorted_avg);
 
 	return 0;
 }
