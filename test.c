@@ -21,7 +21,7 @@ static void initRandomArray() {
 
 static void initSortedArray() {
 	for (int i = 0; i < ARRAY_SIZE; i++) {
-		sorted_arr[i] = i << 4;
+		sorted_arr[i] = i * (INT_MAX / ARRAY_SIZE);
 	}
 }
 
