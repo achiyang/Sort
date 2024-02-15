@@ -76,7 +76,7 @@ static void insertSort(Array* array, void* temp, size_t left, size_t right) {
 	size_t i, j;
 	char *a, *b;
 
-	for (i = left + 1; i <= right; i++) {
+	for (i = left + 1; i <= right; ++i) {
 		a = array->arr + (i * array->element_size);
 		b = a - array->element_size;
 		j = i;
