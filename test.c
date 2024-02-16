@@ -41,7 +41,7 @@ int main() {
 
 	initSortedArray();
 
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	while (t++ < REPEAT) {
 		initRandomArray();
 
