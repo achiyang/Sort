@@ -98,12 +98,13 @@ static void merge(Array* array, char* temp, size_t left, size_t mid, size_t righ
 	char *data;
 	char *a, *b, *c;
 	char *a_limit, *b_limit;
+	int comp;
 
 	data = array->arr + (mid * array->element_size);
 	if (array->compare(data, data + array->element_size) > 0) {
 		temp_left = left;
 		temp_right = mid;
-		data = array->arr + ((mid + 1) * array->element_size);
+		data = array->arr + (mid + 1) * array->element_size;
 		while (temp_left < temp_right) {
 			temp_mid = (temp_left + temp_right) / 2;
 			if (array->compare(data, array->arr + (temp_mid * array->element_size)) < 0)
@@ -130,19 +131,29 @@ static void merge(Array* array, char* temp, size_t left, size_t mid, size_t righ
 			b = array->arr + (mid + 1) * array->element_size;
 			c = array->arr + (new_left * array->element_size);
 			a_limit = temp + (mid - new_left) * array->element_size;
-			b_limit = array->arr + new_right * array->element_size;
+			b_limit = array->arr + (new_right * array->element_size);
 
 			memcpy(a, c, (mid - new_left + 1) * array->element_size);
+			comp = array->compare(a, b);
 			while (a <= a_limit && b <= b_limit) {
-				if (array->compare(a, b) <= 0) {
-					memcpy(c, a, array->element_size);
-					a += array->element_size;
+				if (comp <= 0) {
+					data = a + array->element_size;
+					while (data <= a_limit && (comp = array->compare(data, b)) <= 0) {
+						data += array->element_size;
+					}
+					memcpy(c, a, data - a);
+					c += data - a;
+					a = data;
 				}
 				else {
-					memcpy(c, b, array->element_size);
-					b += array->element_size;
+					data = b + array->element_size;
+					while (data <= b_limit && (comp = array->compare(a, data)) > 0) {
+						data += array->element_size;
+					}
+					memcpy(c, b, data - b);
+					c += data - b;
+					b = data;
 				}
-				c += array->element_size;
 			}
 
 			if (b > b_limit && a <= a_limit) {
@@ -157,16 +168,26 @@ static void merge(Array* array, char* temp, size_t left, size_t mid, size_t righ
 			b_limit = array->arr + (new_left * array->element_size);
 
 			memcpy(temp, array->arr + (mid + 1) * array->element_size, (new_right - mid) * array->element_size);
+			comp = array->compare(a, b);
 			while (a >= a_limit && b >= b_limit) {
-				if (array->compare(a, b) >= 0) {
-					memcpy(c, a, array->element_size);
-					a -= array->element_size;
+				if (comp >= 0) {
+					data = a - array->element_size;
+					while (data >= a_limit && (comp = array->compare(data, b)) >= 0) {
+						data -= array->element_size;
+					}
+					c -= a - data;
+					memcpy(c + array->element_size, data + array->element_size, a - data);
+					a = data;
 				}
 				else {
-					memcpy(c, b, array->element_size);
-					b -= array->element_size;
+					data = b - array->element_size;
+					while (data >= b_limit && (comp = array->compare(a, data)) < 0) {
+						data -= array->element_size;
+					}
+					c -= b - data;
+					memcpy(c + array->element_size, data + array->element_size, b - data);
+					b = data;
 				}
-				c -= array->element_size;
 			}
 
 			if (b < b_limit && a >= a_limit) {
