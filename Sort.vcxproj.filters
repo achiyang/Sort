@@ -10,10 +10,22 @@
     <Filter Include="test">
       <UniqueIdentifier>{dd12cfac-2d64-4384-a0c8-b0011815053b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sort\Tim sort">
+      <UniqueIdentifier>{e7615af4-fc81-4a61-8fd0-d07d3770b036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{c3547dde-d956-4b14-9eb5-3c3270a3d3c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h">
       <Filter>Sort\Merge sort</Filter>
+    </ClInclude>
+    <ClInclude Include="timsort.h">
+      <Filter>Sort\Tim sort</Filter>
+    </ClInclude>
+    <ClInclude Include="sorttypes.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -22,6 +34,9 @@
     </ClCompile>
     <ClCompile Include="test.c">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="timsort.c">
+      <Filter>Sort\Tim sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

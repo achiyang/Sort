@@ -128,10 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h" />
+    <ClInclude Include="sorttypes.h" />
+    <ClInclude Include="timsort.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c" />
     <ClCompile Include="test.c" />
+    <ClCompile Include="timsort.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
