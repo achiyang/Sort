@@ -150,7 +150,7 @@ static void merge(Array* array, char* temp, size_t left, size_t mid, size_t righ
 					while (data <= b_limit && (comp = array->compare(a, data)) > 0) {
 						data += array->element_size;
 					}
-					memcpy(c, b, data - b);
+					memmove(c, b, data - b);
 					c += data - b;
 					b = data;
 				}
@@ -185,7 +185,7 @@ static void merge(Array* array, char* temp, size_t left, size_t mid, size_t righ
 						data -= array->element_size;
 					}
 					c -= b - data;
-					memcpy(c + array->element_size, data + array->element_size, b - data);
+					memmove(c + array->element_size, data + array->element_size, b - data);
 					b = data;
 				}
 			}
