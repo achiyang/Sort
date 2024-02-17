@@ -4,7 +4,6 @@
 
 #define SWAP(a, b, temp, size) \
 	do { \
-		if (a == b) break; \
 		memcpy(temp, a, size); \
 		memcpy(a, b, size); \
 		memcpy(b, temp, size); \
