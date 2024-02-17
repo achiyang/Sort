@@ -8,9 +8,9 @@ typedef struct Array {
 	compareFunc compare;
 } Array;
 
-// #define MERGE_NO_OPTIMIZE
+// #define MERGESORT_NO_OPTIMIZE
 
-#ifdef MERGE_NO_OPTIMIZE
+#ifdef MERGESORT_NO_OPTIMIZE
 static void merge(Array* array, size_t left, size_t mid, size_t right) {
 	size_t i, j, k;
 	char *temp, *p;
@@ -231,4 +231,4 @@ void mergeSort(void* arr, size_t num_elements, size_t size_element, compareFunc 
 		free(temp);
 	}
 }
-#endif // MERGE_NO_OPTIMIZE
+#endif // MERGESORT_NO_OPTIMIZE

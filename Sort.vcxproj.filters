@@ -16,6 +16,9 @@
     <Filter Include="common">
       <UniqueIdentifier>{c3547dde-d956-4b14-9eb5-3c3270a3d3c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sort\Heap sort">
+      <UniqueIdentifier>{2b1a58ef-7d48-4f64-9fa5-250e6fabb733}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h">
@@ -27,6 +30,9 @@
     <ClInclude Include="sorttypes.h">
       <Filter>common</Filter>
     </ClInclude>
+    <ClInclude Include="heapsort.h">
+      <Filter>Sort\Heap sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
@@ -37,6 +43,9 @@
     </ClCompile>
     <ClCompile Include="timsort.c">
       <Filter>Sort\Tim sort</Filter>
+    </ClCompile>
+    <ClCompile Include="heapsort.c">
+      <Filter>Sort\Heap sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
