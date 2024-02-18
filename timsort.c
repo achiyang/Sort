@@ -290,7 +290,7 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 					r3 = stack.stack[stack.top - 2];
 					ascending = r3.right - r3.left <= r1.right - r2.left;
 				}
-				if (!ascending && stack.top >= 3) {
+				if (stack.top >= 3 && !ascending) {
 					r4 = stack.stack[stack.top - 3];
 					ascending = r4.right - r4.left <= r2.right - r3.left;
 				}
