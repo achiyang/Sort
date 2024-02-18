@@ -78,23 +78,25 @@ static void insertSort(Array* array, void* temp, size_t left, size_t right) {
 	char *a, *b;
 
 	for (i = left + 1; i <= right; ++i) {
-		temp_left = left;
-		temp_right = i;
 		a = array->arr + i * array->element_size;
-		while (temp_left < temp_right) {
-			temp_mid = (temp_left + temp_right) / 2;
-			if (array->compare(a, array->arr + temp_mid * array->element_size) < 0) {
-				temp_right = temp_mid;
+		if (array->compare(a, a - array->element_size) < 0) {
+			temp_left = left;
+			temp_right = i - 1;
+			while (temp_left < temp_right) {
+				temp_mid = (temp_left + temp_right) / 2;
+				if (array->compare(a, array->arr + temp_mid * array->element_size) < 0) {
+					temp_right = temp_mid;
+				}
+				else {
+					temp_left = temp_mid + 1;
+				}
 			}
-			else {
-				temp_left = temp_mid + 1;
+			if (temp_left < i) {
+				b = array->arr + temp_left * array->element_size;
+				memcpy(temp, b, a - b);
+				memcpy(b, a, array->element_size);
+				memcpy(b + array->element_size, temp, a - b);
 			}
-		}
-		if (temp_left < i) {
-			b = array->arr + temp_left * array->element_size;
-			memcpy(temp, b, a - b);
-			memcpy(b, a, array->element_size);
-			memcpy(b + array->element_size, temp, a - b);
 		}
 	}
 }

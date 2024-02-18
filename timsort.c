@@ -65,45 +65,49 @@ static void insertSort(char *array, char *temp, int left, int right, int ascendi
 
 	if (ascending) {
 		for (i = left + 1; i <= right; ++i) {
-			temp_left = left;
-			temp_right = i;
 			a = array + i * size_element;
-			while (temp_left < temp_right) {
-				temp_mid = (temp_left + temp_right) / 2;
-				if (compare(a, array + temp_mid * size_element) < 0) {
-					temp_right = temp_mid;
+			if (compare(a, a - size_element) < 0) {
+				temp_left = left;
+				temp_right = i - 1;
+				while (temp_left < temp_right) {
+					temp_mid = (temp_left + temp_right) / 2;
+					if (compare(a, array + temp_mid * size_element) < 0) {
+						temp_right = temp_mid;
+					}
+					else {
+						temp_left = temp_mid + 1;
+					}
 				}
-				else {
-					temp_left = temp_mid + 1;
+				if (temp_left < i) {
+					b = array + temp_left * size_element;
+					memcpy(temp, b, a - b);
+					memcpy(b, a, size_element);
+					memcpy(b + size_element, temp, a - b);
 				}
-			}
-			if (temp_left < i) {
-				b = array + temp_left * size_element;
-				memcpy(temp, b, a - b);
-				memcpy(b, a, size_element);
-				memcpy(b + size_element, temp, a - b);
 			}
 		}
 	}
 	else {
 		for (i = left + 1; i <= right; ++i) {
-			temp_left = left;
-			temp_right = i;
 			a = array + i * size_element;
-			while (temp_left < temp_right) {
-				temp_mid = (temp_left + temp_right) / 2;
-				if (compare(a, array + temp_mid * size_element) >= 0) {
-					temp_right = temp_mid;
+			if (compare(a, a - size_element) >= 0) {
+				temp_left = left;
+				temp_right = i - 1;
+				while (temp_left < temp_right) {
+					temp_mid = (temp_left + temp_right) / 2;
+					if (compare(a, array + temp_mid * size_element) >= 0) {
+						temp_right = temp_mid;
+					}
+					else {
+						temp_left = temp_mid + 1;
+					}
 				}
-				else {
-					temp_left = temp_mid + 1;
+				if (temp_left < i) {
+					b = array + temp_left * size_element;
+					memcpy(temp, b, a - b);
+					memcpy(b, a, size_element);
+					memcpy(b + size_element, temp, a - b);
 				}
-			}
-			if (temp_left < i) {
-				b = array + temp_left * size_element;
-				memcpy(temp, b, a - b);
-				memcpy(b, a, size_element);
-				memcpy(b + size_element, temp, a - b);
 			}
 		}
 	}
