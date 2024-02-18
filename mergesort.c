@@ -73,18 +73,25 @@ void mergeSort(void* arr, size_t num_elements, size_t size_element, compareFunc 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 static void insertSort(Array* array, void* temp, size_t left, size_t right) {
+	size_t i;
+	size_t temp_left, temp_right, temp_mid;
 	char *a, *b;
-	char *a_limit, *b_limit;
 
-	a_limit = array->arr + (right * array->element_size);
-	b_limit = array->arr + (left * array->element_size);
-	for (a = b_limit + array->element_size; a <= a_limit; a += array->element_size) {
-		b = a - array->element_size;
-		while (b >= b_limit && array->compare(a, b) < 0) {
-			b -= array->element_size;
+	for (i = left + 1; i <= right; ++i) {
+		temp_left = left;
+		temp_right = i;
+		a = array->arr + i * array->element_size;
+		while (temp_left < temp_right) {
+			temp_mid = (temp_left + temp_right) / 2;
+			if (array->compare(a, array->arr + temp_mid * array->element_size) < 0) {
+				temp_right = temp_mid;
+			}
+			else {
+				temp_left = temp_mid + 1;
+			}
 		}
-		b += array->element_size;
-		if (b < a) {
+		if (temp_left < i) {
+			b = array->arr + temp_left * array->element_size;
 			memcpy(temp, b, a - b);
 			memcpy(b, a, array->element_size);
 			memcpy(b + array->element_size, temp, a - b);

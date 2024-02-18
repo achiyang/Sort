@@ -2,7 +2,7 @@
 #include <string.h>
 #include "timsort.h"
 
-#define THRESHOLD 32
+#define THRESHOLD 64
 #define MIN_STACK_SIZE 16
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -59,17 +59,26 @@ static Run pop(Stack *stack) {
 }
 
 static void insertSort(char *array, char *temp, int left, int right, int ascending, size_t size_element, compareFunc compare) {
+	int i;
+	int temp_left, temp_right, temp_mid;
 	char *a, *b;
-	char *a_limit, *b_limit;
 
-	a = array + (left * size_element);
-	a_limit = array + (right * size_element);
-	b_limit = a;
 	if (ascending) {
-		for (; a <= a_limit; a += size_element) {
-			for (b = a - size_element; b >= b_limit && compare(a, b) < 0; b -= size_element);
-			b += size_element;
-			if (b < a) {
+		for (i = left + 1; i <= right; ++i) {
+			temp_left = left;
+			temp_right = i;
+			a = array + i * size_element;
+			while (temp_left < temp_right) {
+				temp_mid = (temp_left + temp_right) / 2;
+				if (compare(a, array + temp_mid * size_element) < 0) {
+					temp_right = temp_mid;
+				}
+				else {
+					temp_left = temp_mid + 1;
+				}
+			}
+			if (temp_left < i) {
+				b = array + temp_left * size_element;
 				memcpy(temp, b, a - b);
 				memcpy(b, a, size_element);
 				memcpy(b + size_element, temp, a - b);
@@ -77,10 +86,21 @@ static void insertSort(char *array, char *temp, int left, int right, int ascendi
 		}
 	}
 	else {
-		for (; a <= a_limit; a += size_element) {
-			for (b = a - size_element; b >= b_limit && compare(a, b) >= 0; b -= size_element);
-			b += size_element;
-			if (b < a) {
+		for (i = left + 1; i <= right; ++i) {
+			temp_left = left;
+			temp_right = i;
+			a = array + i * size_element;
+			while (temp_left < temp_right) {
+				temp_mid = (temp_left + temp_right) / 2;
+				if (compare(a, array + temp_mid * size_element) >= 0) {
+					temp_right = temp_mid;
+				}
+				else {
+					temp_left = temp_mid + 1;
+				}
+			}
+			if (temp_left < i) {
+				b = array + temp_left * size_element;
 				memcpy(temp, b, a - b);
 				memcpy(b, a, size_element);
 				memcpy(b + size_element, temp, a - b);
@@ -215,7 +235,7 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 	Stack stack;
 	Run run;
 	Run r1, r2, r3, r4;
-	int min_run_size;
+	size_t min_run_size;
 	char *array;
 	char *temp;
 	int ascending;

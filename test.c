@@ -14,6 +14,16 @@
 typedef TEST_TYPE testtype;
 typedef void (*sortFunc)(void* arr, size_t num_elements, size_t size_element, compareFunc compare);
 
+typedef struct TestData {
+	sortFunc sort;
+	char *name;
+	size_t random_total;
+	size_t sorted_total;
+	int initialized;
+} TestData;
+
+TestData testdata[20];
+
 testtype rand_arr[ARRAY_SIZE];
 testtype sorted_arr[ARRAY_SIZE];
 
@@ -52,10 +62,10 @@ static clock_t test_random(sortFunc sort, char* name) {
 	end = clock();
 
 	if (isSorted(rand_arr)) {
-		printf("%s random_array: %d\n", name, end - start);
+		printf("%s\trandom_array:\t%d\n", name, end - start);
 	}
 	else {
-		printf("%s random_array: failed\n", name);
+		printf("%s\trandom_array:\tfailed\n", name);
 	}
 
 	return end - start;
@@ -69,34 +79,58 @@ static clock_t test_sorted(sortFunc sort, char* name) {
 	end = clock();
 
 	if (isSorted(sorted_arr)) {
-		printf("%s sorted_array: %d\n", name, end - start);
+		printf("%s\tsorted_array:\t%d\n", name, end - start);
 	}
 	else {
-		printf("%s sorted_array: failed\n", name);
+		printf("%s\tsorted_array:\tfailed\n", name);
 		initSortedArray();
 	}
 
 	return end - start;
 }
 
-int main() {
+static void test_add(sortFunc sort, char *name) {
+	int i;
+	for (i = 0; testdata[i].initialized; ++i);
+	testdata[i].sort = sort;
+	testdata[i].name = name;
+	testdata[i].random_total = 0;
+	testdata[i].sorted_total = 0;
+	testdata[i].initialized = 1;
+}
+
+static void test_run() {
 	int t = 0;
 
-	initSortedArray();
 	srand((unsigned)time(0));
-
+	initSortedArray();
 	while (t++ < REPEAT) {
-		test_random(mergeSort, "Merge sort");
-		test_sorted(mergeSort, "Merge sort");
-
-		test_random(timSort, "Tim sort");
-		test_sorted(timSort, "Tim sort");
-
-		test_random(heapSort, "Heap sort");
-		test_sorted(heapSort, "Heap sort");
-
+		for (int i = 0; testdata[i].initialized; ++i) {
+			testdata[i].random_total += test_random(testdata[i].sort, testdata[i].name);
+			testdata[i].sorted_total += test_sorted(testdata[i].sort, testdata[i].name);
+		}
 		printf("\n");
 	}
+
+	for (int i = 0; testdata[i].initialized; ++i) {
+		printf("%s\trandom_array\ttotal:\t%lld,\taverage:\t%lf\n",
+			testdata[i].name,
+			testdata[i].random_total,
+			(double)testdata[i].random_total / REPEAT);
+		printf("%s\tsorted_array\ttotal:\t%lld,\taverage:\t%lf\n",
+			testdata[i].name,
+			testdata[i].sorted_total,
+			(double)testdata[i].sorted_total / REPEAT);
+		printf("\n");
+	}
+}
+
+int main() {
+	test_add(mergeSort, "Merge sort");
+	test_add(timSort, "Tim sort");
+	test_add(heapSort, "Heap sort");
+
+	test_run();
 
 	return 0;
 }
