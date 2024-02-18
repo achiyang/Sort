@@ -8,10 +8,7 @@
 
 #define ARRAY_SIZE 10000000
 #define REPEAT 10
-#define TEST_TYPE int
-#define TYPE_MAX INT_MAX
 
-typedef TEST_TYPE testtype;
 typedef void (*sortFunc)(void* arr, size_t num_elements, size_t size_element, compareFunc compare);
 
 typedef struct TestData {
@@ -24,26 +21,26 @@ typedef struct TestData {
 
 TestData testdata[20];
 
-testtype rand_arr[ARRAY_SIZE];
-testtype sorted_arr[ARRAY_SIZE];
+int rand_arr[ARRAY_SIZE];
+int sorted_arr[ARRAY_SIZE];
 
 static int compare(const void* a, const void* b) {
-	return (int)(*((const testtype*)a) - *((const testtype*)b));
+	return *((const int*)a) - *((const int*)b);
 }
 
 static void initRandomArray() {
 	for (int i = 0; i < ARRAY_SIZE; i++) {
-		rand_arr[i] = (testtype)(((double)TYPE_MAX / (RAND_MAX * RAND_MAX)) * (rand() * rand()));
+		rand_arr[i] = (INT_MAX / (RAND_MAX * RAND_MAX)) * (rand() * rand());
 	}
 }
 
 static void initSortedArray() {
 	for (int i = 0; i < ARRAY_SIZE; i++) {
-		sorted_arr[i] = (testtype)(((double)TYPE_MAX / ARRAY_SIZE) * i);
+		sorted_arr[i] = ((INT_MAX / ARRAY_SIZE) * i);
 	}
 }
 
-static int isSorted(testtype* arr) {
+static int isSorted(int* arr) {
 	for (int i = 1; i < ARRAY_SIZE; i++) {
 		if (compare(arr + (i - 1), arr + i) > 0) {
 			return 0;
@@ -58,7 +55,7 @@ static clock_t test_random(sortFunc sort, char* name) {
 	initRandomArray();
 
 	start = clock();
-	sort(rand_arr, ARRAY_SIZE, sizeof(testtype), compare);
+	sort(rand_arr, ARRAY_SIZE, sizeof(int), compare);
 	end = clock();
 
 	if (isSorted(rand_arr)) {
@@ -75,7 +72,7 @@ static clock_t test_sorted(sortFunc sort, char* name) {
 	clock_t start, end;
 
 	start = clock();
-	sort(sorted_arr, ARRAY_SIZE, sizeof(testtype), compare);
+	sort(sorted_arr, ARRAY_SIZE, sizeof(int), compare);
 	end = clock();
 
 	if (isSorted(sorted_arr)) {
