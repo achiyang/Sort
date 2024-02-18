@@ -89,6 +89,9 @@ int main() {
 		test_random(mergeSort, "Merge sort");
 		test_sorted(mergeSort, "Merge sort");
 
+		test_random(timSort, "Tim sort");
+		test_sorted(timSort, "Tim sort");
+
 		test_random(heapSort, "Heap sort");
 		test_sorted(heapSort, "Heap sort");
 
