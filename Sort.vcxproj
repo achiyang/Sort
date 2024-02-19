@@ -129,12 +129,14 @@
   <ItemGroup>
     <ClInclude Include="heapsort.h" />
     <ClInclude Include="mergesort.h" />
+    <ClInclude Include="quicksort.h" />
     <ClInclude Include="sorttypes.h" />
     <ClInclude Include="timsort.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="heapsort.c" />
     <ClCompile Include="mergesort.c" />
+    <ClCompile Include="quicksort.c" />
     <ClCompile Include="test.c" />
     <ClCompile Include="timsort.c" />
   </ItemGroup>
