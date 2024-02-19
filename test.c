@@ -8,7 +8,7 @@
 #include "heapsort.h"
 
 #define ARRAY_SIZE 10000000
-#define REPEAT 1/*0*/
+#define REPEAT 10
 
 typedef void (*sortFunc)(void* arr, size_t num_elements, size_t size_element, compareFunc compare);
 
