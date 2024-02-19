@@ -49,13 +49,8 @@ static void push(Stack *stack, Run run) {
 	stack->stack[stack->top] = run;
 }
 
-static Run pop(Stack *stack) {
-	Run ret = stack->stack[stack->top--];
-
-	if (stack->top < stack->size / 4 && stack->size > MIN_STACK_SIZE)
-		resize(stack, stack->size / 2);
-
-	return ret;
+static inline Run pop(Stack *stack) {
+	return stack->stack[stack->top--];
 }
 
 static void insertSort(char *array, char *temp, int left, int right, int ascending, size_t size_element, compareFunc compare) {
@@ -78,12 +73,10 @@ static void insertSort(char *array, char *temp, int left, int right, int ascendi
 						temp_left = temp_mid + 1;
 					}
 				}
-				if (temp_left < i) {
-					b = array + temp_left * size_element;
-					memcpy(temp, b, a - b);
-					memcpy(b, a, size_element);
-					memcpy(b + size_element, temp, a - b);
-				}
+				b = array + temp_left * size_element;
+				memcpy(temp, b, a - b);
+				memcpy(b, a, size_element);
+				memcpy(b + size_element, temp, a - b);
 			}
 		}
 	}
@@ -102,12 +95,10 @@ static void insertSort(char *array, char *temp, int left, int right, int ascendi
 						temp_left = temp_mid + 1;
 					}
 				}
-				if (temp_left < i) {
-					b = array + temp_left * size_element;
-					memcpy(temp, b, a - b);
-					memcpy(b, a, size_element);
-					memcpy(b + size_element, temp, a - b);
-				}
+				b = array + temp_left * size_element;
+				memcpy(temp, b, a - b);
+				memcpy(b, a, size_element);
+				memcpy(b + size_element, temp, a - b);
 			}
 		}
 	}
@@ -242,7 +233,7 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 	size_t min_run_size;
 	char *array;
 	char *temp;
-	int ascending;
+	int boolean;
 	char *p, *limit;
 
 	if (num_elements > 1) {
@@ -250,7 +241,7 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 		array = (char *)arr;
 		min_run_size = num_elements;
 		while (min_run_size > THRESHOLD) {
-			min_run_size >>= 1;
+			min_run_size = (min_run_size >> 1) + (min_run_size & 1);
 		}
 		temp = malloc(size_element * MAX(num_elements / 2, min_run_size));
 
@@ -260,23 +251,24 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 		while (1) {
 			p = array + (run.left * size_element);
 			if (p < limit) {
-				ascending = compare(p, p + size_element) <= 0;
-				insertSort(array, temp, run.left, run.right, ascending, size_element, compare);
+				boolean = compare(p, p + size_element) <= 0;
+				insertSort(array, temp, run.left, run.right, boolean, size_element, compare);
 
 				p = array + (run.right * size_element);
-				if (ascending) {
+				if (boolean) {
 					while (p < limit && compare(p, p + size_element) <= 0) {
+						++run.right;
 						p += size_element;
 					}
 				}
 				else {
 					while (p < limit && compare(p, p + size_element) > 0) {
+						++run.right;
 						p += size_element;
 					}
 				}
-				run.right = (int)((p - array) / size_element);
 
-				if (!ascending) {
+				if (!boolean) {
 					reverse(array, temp, run, size_element);
 				}
 			}
@@ -285,17 +277,17 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 			while (stack.top >= 1) {
 				r1 = stack.stack[stack.top];
 				r2 = stack.stack[stack.top - 1];
-				ascending = 0;
+				boolean = 0;
 				if (stack.top >= 2) {
 					r3 = stack.stack[stack.top - 2];
-					ascending = r3.right - r3.left <= r1.right - r2.left;
+					boolean = r3.right - r3.left <= r1.right - r2.left;
 				}
-				if (stack.top >= 3 && !ascending) {
+				if (stack.top >= 3 && !boolean) {
 					r4 = stack.stack[stack.top - 3];
-					ascending = r4.right - r4.left <= r2.right - r3.left;
+					boolean = r4.right - r4.left <= r2.right - r3.left;
 				}
 
-				if (ascending) {
+				if (boolean) {
 					--stack.top;
 					if (r3.right - r3.left < r1.right - r1.left) {
 						stack.stack[stack.top - 1] = merge(array, temp, r3, r2, size_element, compare);
