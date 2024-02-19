@@ -91,12 +91,10 @@ static void insertSort(Array* array, void* temp, size_t left, size_t right) {
 					temp_left = temp_mid + 1;
 				}
 			}
-			if (temp_left < i) {
-				b = array->arr + temp_left * array->element_size;
-				memcpy(temp, b, a - b);
-				memcpy(b, a, array->element_size);
-				memcpy(b + array->element_size, temp, a - b);
-			}
+			b = array->arr + temp_left * array->element_size;
+			memcpy(temp, b, a - b);
+			memcpy(b, a, array->element_size);
+			memcpy(b + array->element_size, temp, a - b);
 		}
 	}
 }
