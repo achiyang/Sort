@@ -1,6 +1,8 @@
 #ifndef SORTUTILS_H
 #define SORTUTILS_H
 
+#include <stdlib.h>
+#include <string.h>
 #include "sorttypes.h"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))

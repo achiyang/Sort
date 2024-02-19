@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="dualpivot.h" />
     <ClInclude Include="heapsort.h" />
+    <ClInclude Include="insertionsort.h" />
     <ClInclude Include="mergesort.h" />
     <ClInclude Include="quicksort.h" />
     <ClInclude Include="sorttypes.h" />
@@ -138,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="dualpivot.c" />
     <ClCompile Include="heapsort.c" />
+    <ClCompile Include="insertionsort.c" />
     <ClCompile Include="mergesort.c" />
     <ClCompile Include="quicksort.c" />
     <ClCompile Include="sortutils.c" />

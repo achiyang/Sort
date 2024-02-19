@@ -22,6 +22,9 @@
     <Filter Include="Sort\Quick sort">
       <UniqueIdentifier>{d8a53b67-b8f1-4ae2-8f62-8d872bcbaa29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sort\Insertion sort">
+      <UniqueIdentifier>{65d09462-efc4-4d40-96de-9e0d1e3a9d4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h">
@@ -45,6 +48,9 @@
     <ClInclude Include="sortutils.h">
       <Filter>common</Filter>
     </ClInclude>
+    <ClInclude Include="insertionsort.h">
+      <Filter>Sort\Insertion sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
@@ -67,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="sortutils.c">
       <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="insertionsort.c">
+      <Filter>Sort\Insertion sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

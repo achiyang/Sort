@@ -1,4 +1,3 @@
-#include <string.h>
 #include "sortutils.h"
 
 void insertSort(char *arr, char *temp, size_t left, size_t right, size_t size_element, compareFunc compare) {

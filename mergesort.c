@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
+#include "sortutils.h"
 #include "mergesort.h"
 
 // #define MERGESORT_NO_OPTIMIZE
@@ -63,8 +62,6 @@ void mergeSort(void* arr, size_t num_elements, size_t size_element, compareFunc 
 	}
 }
 #else
-#include "sortutils.h"
-
 #define THRESHOLD 64
 
 static void mergeSortCore(char* arr, char* temp, size_t left, size_t right, size_t size_element, compareFunc compare) {
