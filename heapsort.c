@@ -1,7 +1,7 @@
 #include "sortutils.h"
 #include "heapsort.h"
 
-static inline void heapify(char* arr, void* temp, size_t i, size_t n, size_t size_element, compareFunc compare) {
+static inline void heapify(char *arr, void *temp, size_t i, size_t n, size_t size_element, compareFunc compare) {
 	size_t largest, left, right;
 	char *a, *b, *p;
 
@@ -30,13 +30,13 @@ static inline void heapify(char* arr, void* temp, size_t i, size_t n, size_t siz
 	}
 }
 
-void heapSort(void* arr, size_t num_elements, size_t size_element, compareFunc compare) {
+void heapSort(void *arr, size_t num_elements, size_t size_element, compareFunc compare) {
 	char *array;
 	char *p;
 	void *temp;
 
 	if (num_elements > 1) {
-		array = (char*)arr;
+		array = (char *)arr;
 		temp = malloc(size_element);
 		if (temp == NULL)
 			exit(EXIT_FAILURE);

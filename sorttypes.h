@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-typedef int (*compareFunc)(const void*, const void*);
+typedef int (*compareFunc)(const void *, const void *);
 
 #endif // SORTTYPES_H

@@ -11,7 +11,7 @@
 #define ARRAY_SIZE 10000000
 #define REPEAT 10
 
-typedef void (*sortFunc)(void* arr, size_t num_elements, size_t size_element, compareFunc compare);
+typedef void (*sortFunc)(void *arr, size_t num_elements, size_t size_element, compareFunc compare);
 
 typedef struct TestData {
 	sortFunc sort;
@@ -26,8 +26,8 @@ TestData testdata[20];
 int rand_arr[ARRAY_SIZE];
 int sorted_arr[ARRAY_SIZE];
 
-static int compare(const void* a, const void* b) {
-	return *((const int*)a) - *((const int*)b);
+static int compare(const void *a, const void *b) {
+	return *((const int *)a) - *((const int *)b);
 }
 
 static void initRandomArray() {
@@ -42,7 +42,7 @@ static void initSortedArray() {
 	}
 }
 
-static int isSorted(int* arr) {
+static int isSorted(int *arr) {
 	for (int i = 1; i < ARRAY_SIZE; i++) {
 		if (compare(arr + (i - 1), arr + i) > 0) {
 			return 0;
@@ -51,7 +51,7 @@ static int isSorted(int* arr) {
 	return 1;
 }
 
-static clock_t test_random(sortFunc sort, char* name) {
+static clock_t test_random(sortFunc sort, char *name) {
 	clock_t start, end;
 
 	initRandomArray();
@@ -70,7 +70,7 @@ static clock_t test_random(sortFunc sort, char* name) {
 	return end - start;
 }
 
-static clock_t test_sorted(sortFunc sort, char* name) {
+static clock_t test_sorted(sortFunc sort, char *name) {
 	clock_t start, end;
 
 	start = clock();
