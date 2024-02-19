@@ -5,6 +5,7 @@
 #include "timsort.h"
 #include "mergesort.h"
 #include "quicksort.h"
+#include "dualpivot.h"
 #include "heapsort.h"
 
 #define ARRAY_SIZE 10000000

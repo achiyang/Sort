@@ -1,17 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
+#include "sortutils.h"
 #include "timsort.h"
 
 #define THRESHOLD 64
 #define MIN_STACK_SIZE 16
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-#define SWAP(a, b, temp, size) \
-	do { \
-		memcpy(temp, a, size); \
-		memcpy(a, b, size); \
-		memcpy(b, temp, size); \
-	} while(0)
 
 typedef struct Run {
 	size_t left;
@@ -53,7 +46,7 @@ static Run pop(Stack *stack) {
 	return stack->stack[stack->top--];
 }
 
-static void insertSort(char *array, char *temp, size_t left, size_t right, int ascending, size_t size_element, compareFunc compare) {
+static void insertAsDesSort(char *array, char *temp, size_t left, size_t right, int ascending, size_t size_element, compareFunc compare) {
 	size_t i;
 	size_t temp_left, temp_right, temp_mid;
 	char *a, *b;
@@ -116,114 +109,9 @@ static void reverse(char *arr, char *temp, Run run, size_t size_element) {
 	}
 }
 
-static Run merge(char *arr, char *temp, Run left, Run right, size_t size_element, compareFunc compare) {
-	Run ret;
-	int new_left, new_right;
-	int temp_left, temp_mid, temp_right;
-	char *data;
-	char *a, *b, *c;
-	char *a_limit, *b_limit;
-	int comp;
-
-	ret.left = left.left;
-	ret.right = right.right;
-	data = arr + (left.right * size_element);
-	if (compare(data, data + size_element) > 0) {
-		temp_left = left.left;
-		temp_right = left.right;
-		data = arr + (right.left * size_element);
-		while (temp_left < temp_right) {
-			temp_mid = (temp_left + temp_right) >> 1;
-			if (compare(data, arr + (temp_mid * size_element)) < 0)
-				temp_right = temp_mid;
-			else
-				temp_left = temp_mid + 1;
-		}
-		new_left = temp_left;
-
-		temp_left = right.left;
-		temp_right = right.right;
-		data = arr + (left.right * size_element);
-		while (temp_left < temp_right) {
-			temp_mid = (temp_left + temp_right + 1) >> 1;
-			if (compare(data, arr + (temp_mid * size_element)) > 0)
-				temp_left = temp_mid;
-			else
-				temp_right = temp_mid - 1;
-		}
-		new_right = temp_right;
-
-		if (left.right - new_left <= new_right - right.left) {
-			a = temp;
-			b = arr + (right.left) * size_element;
-			c = arr + (new_left * size_element);
-			a_limit = temp + (left.right - new_left) * size_element;
-			b_limit = arr + (new_right * size_element);
-
-			memcpy(a, c, (left.right - new_left + 1) * size_element);
-			comp = compare(a, b);
-			while (a <= a_limit && b <= b_limit) {
-				if (comp <= 0) {
-					data = a + size_element;
-					while (data <= a_limit && (comp = compare(data, b)) <= 0) {
-						data += size_element;
-					}
-					memcpy(c, a, data - a);
-					c += data - a;
-					a = data;
-				}
-				else {
-					data = b + size_element;
-					while (data <= b_limit && (comp = compare(a, data)) > 0) {
-						data += size_element;
-					}
-					memmove(c, b, data - b);
-					c += data - b;
-					b = data;
-				}
-			}
-
-			if (b > b_limit && a <= a_limit) {
-				memcpy(c, a, a_limit - a + size_element);
-			}
-		}
-		else {
-			a = temp + (new_right - right.left) * size_element;
-			b = arr + (left.right * size_element);
-			c = arr + (new_right * size_element);
-			a_limit = temp;
-			b_limit = arr + (new_left * size_element);
-
-			memcpy(temp, arr + (right.left * size_element), (new_right - right.left + 1) * size_element);
-			comp = compare(a, b);
-			while (a >= a_limit && b >= b_limit) {
-				if (comp >= 0) {
-					data = a - size_element;
-					while (data >= a_limit && (comp = compare(data, b)) >= 0) {
-						data -= size_element;
-					}
-					c -= a - data;
-					memcpy(c + size_element, data + size_element, a - data);
-					a = data;
-				}
-				else {
-					data = b - size_element;
-					while (data >= b_limit && (comp = compare(a, data)) < 0) {
-						data -= size_element;
-					}
-					c -= b - data;
-					memmove(c + size_element, data + size_element, b - data);
-					b = data;
-				}
-			}
-
-			if (b < b_limit && a >= a_limit) {
-				memcpy(b_limit, a_limit, a - a_limit + size_element);
-			}
-		}
-	}
-
-	return ret;
+static Run mergeRun(char *arr, char *temp, Run left, Run right, size_t size_element, compareFunc compare) {
+	merge(arr, temp, left.left, left.right, right.right, size_element, compare);
+	return (Run) { .left = left.left, .right = right.right };
 }
 
 void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc compare) {
@@ -252,7 +140,7 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 			p = array + (run.left * size_element);
 			if (p < limit) {
 				boolean = compare(p, p + size_element) <= 0;
-				insertSort(array, temp, run.left, run.right, boolean, size_element, compare);
+				insertAsDesSort(array, temp, run.left, run.right, boolean, size_element, compare);
 
 				p = array + (run.right * size_element);
 				if (boolean) {
@@ -290,15 +178,15 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 				if (boolean) {
 					--stack.top;
 					if (r3.right - r3.left < r1.right - r1.left) {
-						stack.stack[stack.top - 1] = merge(array, temp, r3, r2, size_element, compare);
+						stack.stack[stack.top - 1] = mergeRun(array, temp, r3, r2, size_element, compare);
 						stack.stack[stack.top] = r1;
 					}
 					else {
-						stack.stack[stack.top] = merge(array, temp, r2, r1, size_element, compare);
+						stack.stack[stack.top] = mergeRun(array, temp, r2, r1, size_element, compare);
 					}
 				}
 				else if (r2.right - r2.left <= r1.right - r1.left) {
-					stack.stack[--stack.top] = merge(array, temp, r2, r1, size_element, compare);
+					stack.stack[--stack.top] = mergeRun(array, temp, r2, r1, size_element, compare);
 				}
 				else {
 					break;
@@ -316,7 +204,7 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 
 		run = pop(&stack);
 		while (stack.top >= 0) {
-			run = merge(array, temp, pop(&stack), run, size_element, compare);
+			run = mergeRun(array, temp, pop(&stack), run, size_element, compare);
 		}
 
 		free(stack.stack);

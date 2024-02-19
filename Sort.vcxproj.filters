@@ -42,6 +42,9 @@
     <ClInclude Include="dualpivot.h">
       <Filter>Sort\Quick sort</Filter>
     </ClInclude>
+    <ClInclude Include="sortutils.h">
+      <Filter>common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
@@ -61,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="quicksort.c">
       <Filter>Sort\Quick sort</Filter>
+    </ClCompile>
+    <ClCompile Include="sortutils.c">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
