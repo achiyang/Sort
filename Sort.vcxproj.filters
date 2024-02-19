@@ -19,6 +19,9 @@
     <Filter Include="Sort\Heap sort">
       <UniqueIdentifier>{2b1a58ef-7d48-4f64-9fa5-250e6fabb733}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sort\Quick sort">
+      <UniqueIdentifier>{d8a53b67-b8f1-4ae2-8f62-8d872bcbaa29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h">
@@ -33,6 +36,12 @@
     <ClInclude Include="heapsort.h">
       <Filter>Sort\Heap sort</Filter>
     </ClInclude>
+    <ClInclude Include="quicksort.h">
+      <Filter>Sort\Quick sort</Filter>
+    </ClInclude>
+    <ClInclude Include="dualpivot.h">
+      <Filter>Sort\Quick sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
@@ -46,6 +55,12 @@
     </ClCompile>
     <ClCompile Include="heapsort.c">
       <Filter>Sort\Heap sort</Filter>
+    </ClCompile>
+    <ClCompile Include="dualpivot.c">
+      <Filter>Sort\Quick sort</Filter>
+    </ClCompile>
+    <ClCompile Include="quicksort.c">
+      <Filter>Sort\Quick sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
