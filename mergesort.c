@@ -69,7 +69,7 @@ void mergeSort(void* arr, size_t num_elements, size_t size_element, compareFunc 
 	}
 }
 #else
-#define THRESHOLD 20
+#define THRESHOLD 64
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 static void insertSort(Array* array, void* temp, size_t left, size_t right) {
@@ -83,7 +83,7 @@ static void insertSort(Array* array, void* temp, size_t left, size_t right) {
 			temp_left = left;
 			temp_right = i - 1;
 			while (temp_left < temp_right) {
-				temp_mid = (temp_left + temp_right) / 2;
+				temp_mid = (temp_left + temp_right) >> 1;
 				if (array->compare(a, array->arr + temp_mid * array->element_size) < 0) {
 					temp_right = temp_mid;
 				}
@@ -113,7 +113,7 @@ static void merge(Array* array, char* temp, size_t left, size_t mid, size_t righ
 		temp_right = mid;
 		data = array->arr + (mid + 1) * array->element_size;
 		while (temp_left < temp_right) {
-			temp_mid = (temp_left + temp_right) / 2;
+			temp_mid = (temp_left + temp_right) >> 1;
 			if (array->compare(data, array->arr + (temp_mid * array->element_size)) < 0)
 				temp_right = temp_mid;
 			else
@@ -125,7 +125,7 @@ static void merge(Array* array, char* temp, size_t left, size_t mid, size_t righ
 		temp_right = right;
 		data = array->arr + (mid * array->element_size);
 		while (temp_left < temp_right) {
-			temp_mid = (temp_left + temp_right + 1) / 2;
+			temp_mid = (temp_left + temp_right + 1) >> 1;
 			if (array->compare(data, array->arr + (temp_mid * array->element_size)) > 0)
 				temp_left = temp_mid;
 			else
@@ -209,7 +209,7 @@ static void mergeSortCore(Array* array, char* temp, size_t left, size_t right) {
 
 	if (left < right) {
 		if (right - left > THRESHOLD) {
-			mid = (left + right) / 2;
+			mid = (left + right) >> 1;
 			mergeSortCore(array, temp, left, mid);
 			mergeSortCore(array, temp, mid + 1, right);
 			merge(array, temp, left, mid, right);
@@ -225,7 +225,7 @@ void mergeSort(void* arr, size_t num_elements, size_t size_element, compareFunc 
 	char* temp;
 
 	if (num_elements > 1) {
-		temp = (char*)malloc(size_element * MAX(num_elements / 2, THRESHOLD));
+		temp = (char*)malloc(size_element * MAX(num_elements >> 1, THRESHOLD));
 		if (temp == NULL)
 			exit(EXIT_FAILURE);
 

@@ -14,8 +14,8 @@
 	} while(0)
 
 typedef struct Run {
-	int left;
-	int right;
+	size_t left;
+	size_t right;
 } Run;
 
 typedef struct Stack {
@@ -53,9 +53,9 @@ static Run pop(Stack *stack) {
 	return stack->stack[stack->top--];
 }
 
-static void insertSort(char *array, char *temp, int left, int right, int ascending, size_t size_element, compareFunc compare) {
-	int i;
-	int temp_left, temp_right, temp_mid;
+static void insertSort(char *array, char *temp, size_t left, size_t right, int ascending, size_t size_element, compareFunc compare) {
+	size_t i;
+	size_t temp_left, temp_right, temp_mid;
 	char *a, *b;
 
 	if (ascending) {
@@ -65,7 +65,7 @@ static void insertSort(char *array, char *temp, int left, int right, int ascendi
 				temp_left = left;
 				temp_right = i - 1;
 				while (temp_left < temp_right) {
-					temp_mid = (temp_left + temp_right) / 2;
+					temp_mid = (temp_left + temp_right) >> 1;
 					if (compare(a, array + temp_mid * size_element) < 0) {
 						temp_right = temp_mid;
 					}
@@ -87,7 +87,7 @@ static void insertSort(char *array, char *temp, int left, int right, int ascendi
 				temp_left = left;
 				temp_right = i - 1;
 				while (temp_left < temp_right) {
-					temp_mid = (temp_left + temp_right) / 2;
+					temp_mid = (temp_left + temp_right) >> 1;
 					if (compare(a, array + temp_mid * size_element) >= 0) {
 						temp_right = temp_mid;
 					}
@@ -133,7 +133,7 @@ static Run merge(char *arr, char *temp, Run left, Run right, size_t size_element
 		temp_right = left.right;
 		data = arr + (right.left * size_element);
 		while (temp_left < temp_right) {
-			temp_mid = (temp_left + temp_right) / 2;
+			temp_mid = (temp_left + temp_right) >> 1;
 			if (compare(data, arr + (temp_mid * size_element)) < 0)
 				temp_right = temp_mid;
 			else
@@ -145,7 +145,7 @@ static Run merge(char *arr, char *temp, Run left, Run right, size_t size_element
 		temp_right = right.right;
 		data = arr + (left.right * size_element);
 		while (temp_left < temp_right) {
-			temp_mid = (temp_left + temp_right + 1) / 2;
+			temp_mid = (temp_left + temp_right + 1) >> 1;
 			if (compare(data, arr + (temp_mid * size_element)) > 0)
 				temp_left = temp_mid;
 			else
@@ -243,10 +243,10 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 		while (min_run_size > THRESHOLD) {
 			min_run_size = (min_run_size >> 1) + (min_run_size & 1);
 		}
-		temp = malloc(size_element * MAX(num_elements / 2, min_run_size));
+		temp = malloc(size_element * MAX(num_elements >> 1, min_run_size));
 
 		run.left = 0;
-		run.right = (int)MIN(min_run_size - 1, num_elements - 1);
+		run.right = MIN(min_run_size - 1, num_elements - 1);
 		limit = array + (num_elements - 1) * size_element;
 		while (1) {
 			p = array + (run.left * size_element);
@@ -307,7 +307,7 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 
 			if (p < limit) {
 				run.left = run.right + 1;
-				run.right = (int)MIN(run.right + min_run_size, num_elements - 1);
+				run.right = MIN(run.right + min_run_size, num_elements - 1);
 			}
 			else {
 				break;

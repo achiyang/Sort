@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <time.h>
-#include "mergesort.h"
-#include "heapsort.h"
 #include "timsort.h"
+#include "mergesort.h"
+#include "quicksort.h"
+#include "heapsort.h"
 
 #define ARRAY_SIZE 10000000
-#define REPEAT 10
+#define REPEAT 1/*0*/
 
 typedef void (*sortFunc)(void* arr, size_t num_elements, size_t size_element, compareFunc compare);
 
@@ -59,10 +60,10 @@ static clock_t test_random(sortFunc sort, char* name) {
 	end = clock();
 
 	if (isSorted(rand_arr)) {
-		printf("%-15srandom_array:\t%d\n", name, end - start);
+		printf("%-15srandom_array\t%d\n", name, end - start);
 	}
 	else {
-		printf("%-15srandom_array:\tfailed\n", name);
+		printf("%-15srandom_array\tfailed\n", name);
 	}
 
 	return end - start;
@@ -76,10 +77,10 @@ static clock_t test_sorted(sortFunc sort, char* name) {
 	end = clock();
 
 	if (isSorted(sorted_arr)) {
-		printf("%-15ssorted_array:\t%d\n", name, end - start);
+		printf("%-15ssorted_array\t%d\n", name, end - start);
 	}
 	else {
-		printf("%-15ssorted_array:\tfailed\n", name);
+		printf("%-15ssorted_array\tfailed\n", name);
 		initSortedArray();
 	}
 
@@ -105,18 +106,17 @@ static void test_run() {
 		for (int i = 0; testdata[i].initialized; ++i) {
 			testdata[i].random_total += test_random(testdata[i].sort, testdata[i].name);
 			testdata[i].sorted_total += test_sorted(testdata[i].sort, testdata[i].name);
+			printf("\n");
 		}
-		printf("\n");
+		printf("----------------------------------------\n\n");
 	}
 
 	for (int i = 0; testdata[i].initialized; ++i) {
-		printf("%-15srandom_array\ttotal:\t%lld,\taverage:\t%lf\n",
+		printf("%-15srandom_array\tavg: %g\n",
 			testdata[i].name,
-			testdata[i].random_total,
 			(double)testdata[i].random_total / REPEAT);
-		printf("%-15ssorted_array\ttotal:\t%lld,\taverage:\t%lf\n",
+		printf("%-15ssorted_array\tavg: %g\n",
 			testdata[i].name,
-			testdata[i].sorted_total,
 			(double)testdata[i].sorted_total / REPEAT);
 		printf("\n");
 	}
@@ -124,8 +124,9 @@ static void test_run() {
 
 int main() {
 	test_add(qsort, "qsort");
-	test_add(mergeSort, "Merge sort");
 	test_add(timSort, "Tim sort");
+	test_add(mergeSort, "Merge sort");
+	test_add(quickSort, "Quick sort");
 	test_add(heapSort, "Heap sort");
 
 	test_run();
