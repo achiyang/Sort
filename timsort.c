@@ -49,7 +49,7 @@ static void push(Stack *stack, Run run) {
 	stack->stack[stack->top] = run;
 }
 
-static inline Run pop(Stack *stack) {
+static Run pop(Stack *stack) {
 	return stack->stack[stack->top--];
 }
 
