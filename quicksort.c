@@ -11,7 +11,7 @@
 	} while(0)
 
 static void insertSort(char *arr, char *temp, size_t left, size_t right, size_t size_element, compareFunc compare) {
-	size_t i, j;
+	size_t i;
 	size_t temp_left, temp_right, temp_mid;
 	char *a, *b;
 
