@@ -7,8 +7,9 @@
 #include "quicksort.h"
 #include "dualpivot.h"
 #include "heapsort.h"
+#include "insertionsort.h"
 
-#define ARRAY_SIZE 10000000
+#define ARRAY_SIZE 5000000
 #define REPEAT 10
 
 typedef void (*sortFunc)(void *arr, size_t num_elements, size_t size_element, compareFunc compare);
@@ -124,10 +125,12 @@ static void test_run() {
 }
 
 int main() {
+	// test_add(insertionSort, "Insertion sort");
 	test_add(qsort, "qsort");
 	test_add(timSort, "Tim sort");
 	test_add(mergeSort, "Merge sort");
 	test_add(quickSort, "Quick sort");
+	test_add(dualPivotQuickSort, "Dual-Pivot");
 	test_add(heapSort, "Heap sort");
 
 	test_run();
