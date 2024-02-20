@@ -25,10 +25,10 @@ static size_t partition(char *arr, char *temp, size_t left, size_t right, size_t
 	while (1) {
 		lp += size_element;
 		rp -= size_element;
-		while (lp <= rp && compare(lp, p) <= 0) {
+		while (compare(lp, p) <= 0 && lp <= rp) {
 			lp += size_element;
 		}
-		while (lp <= rp && compare(rp, p) > 0) {
+		while (compare(rp, p) > 0 && lp <= rp) {
 			rp -= size_element;
 		}
 		if (lp < rp) {
@@ -38,9 +38,7 @@ static size_t partition(char *arr, char *temp, size_t left, size_t right, size_t
 			break;
 		}
 	}
-	if (lp != p) {
-		SWAP(p, lp, temp, size_element);
-	}
+	SWAP(p, lp, temp, size_element);
 
 	return (lp - arr) / size_element;
 }
