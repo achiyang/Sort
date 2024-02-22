@@ -9,7 +9,6 @@ typedef struct Pair {
 } Pair;
 
 static Pair partition(char *arr, char *temp, size_t left, size_t right, size_t size_element, compareFunc compare) {
-	Pair ret;
 	size_t size_one_third;
 	char *lp, *rp;
 	char *l, *r, *k;
@@ -20,14 +19,28 @@ static Pair partition(char *arr, char *temp, size_t left, size_t right, size_t s
 	size_one_third = (right - left) / 3 * size_element;
 	l = lp + size_one_third;
 	r = l + size_one_third;
+	if (compare(lp, l) > 0) {
+		SWAP(lp, l, temp, size_element);
+	}
 	if (compare(l, r) > 0) {
-		SWAP(l, rp, temp, size_element);
-		SWAP(r, lp, temp, size_element);
+		SWAP(l, r, temp, size_element);
+		if (compare(lp, l) > 0) {
+			SWAP(lp, l, temp, size_element);
+		}
 	}
-	else {
-		SWAP(l, lp, temp, size_element);
+	if (compare(r, rp) > 0) {
 		SWAP(r, rp, temp, size_element);
+		if (compare(l, r) > 0) {
+			SWAP(l, r, temp, size_element);
+			if (compare(lp, l) > 0) {
+				SWAP(lp, l, temp, size_element);
+			}
+		}
 	}
+	lp += size_element;
+	rp -= size_element;
+	SWAP(lp, l, temp, size_element);
+	SWAP(rp, r, temp, size_element);
 
 	k = l = lp + size_element;
 	r = rp - size_element;
@@ -60,16 +73,18 @@ static Pair partition(char *arr, char *temp, size_t left, size_t right, size_t s
 	SWAP(lp, l, temp, size_element);
 	SWAP(rp, r, temp, size_element);
 
-	ret = (Pair){ .first = (l - arr) / size_element, .second = (r - arr) / size_element };
-	return ret;
+	return (Pair){ .first = (l - arr) / size_element, .second = (r - arr) / size_element };
 }
 
 static void dualPivotSortCore(char *arr, char *temp, size_t left, size_t right, size_t size_element, compareFunc compare) {
 	if (right > left) {
 		if (right - left > THRESHOLD) {
 			Pair pair = partition(arr, temp, left, right, size_element, compare);
-			if (pair.first) dualPivotSortCore(arr, temp, left, pair.first - 1, size_element, compare);
-			dualPivotSortCore(arr, temp, pair.first + 1, pair.second - 1, size_element, compare);
+			size_t i = pair.first, j = pair.second;
+			for (; compare(arr + i * size_element, arr + (i + 1) * size_element) == 0 && i < j; ++i);
+			for (; compare(arr + j * size_element, arr + (j - 1) * size_element) == 0 && i < j; --j);
+			dualPivotSortCore(arr, temp, left, pair.first - 1, size_element, compare);
+			dualPivotSortCore(arr, temp, i + 1, j - 1, size_element, compare);
 			dualPivotSortCore(arr, temp, pair.second + 1, right, size_element, compare);
 		}
 		else {

@@ -4,49 +4,51 @@
 #define THRESHOLD 64
 
 static size_t partition(char *arr, char *temp, size_t left, size_t right, size_t size_element, compareFunc compare) {
-	char *lp, *rp, *p;
+	char *l, *r, *p;
 
-	lp = arr + left * size_element;
+	l = arr + left * size_element;
 	p = arr + ((left + right) >> 1) * size_element;
-	rp = arr + right * size_element;
-	if (compare(p, lp) < 0) {
-		SWAP(p, lp, temp, size_element);
+	r = arr + right * size_element;
+	if (compare(p, l) < 0) {
+		SWAP(p, l, temp, size_element);
 	}
-	if (compare(rp, p) < 0) {
-		SWAP(rp, p, temp, size_element);
-		if (compare(p, lp) < 0) {
-			SWAP(p, lp, temp, size_element);
+	if (compare(r, p) < 0) {
+		SWAP(r, p, temp, size_element);
+		if (compare(p, l) < 0) {
+			SWAP(p, l, temp, size_element);
 		}
 	}
-	rp -= size_element;
-	SWAP(p, rp, temp, size_element);
-	p = rp;
+	r -= size_element;
+	SWAP(p, r, temp, size_element);
+	p = r;
 
 	while (1) {
-		lp += size_element;
-		rp -= size_element;
-		while (compare(lp, p) <= 0 && lp <= rp) {
-			lp += size_element;
+		l += size_element;
+		r -= size_element;
+		while (compare(l, p) <= 0 && l <= r) {
+			l += size_element;
 		}
-		while (compare(rp, p) > 0 && lp <= rp) {
-			rp -= size_element;
+		while (compare(r, p) > 0 && l <= r) {
+			r -= size_element;
 		}
-		if (lp < rp) {
-			SWAP(lp, rp, temp, size_element);
+		if (l < r) {
+			SWAP(l, r, temp, size_element);
 		}
 		else {
 			break;
 		}
 	}
-	SWAP(p, lp, temp, size_element);
+	SWAP(p, l, temp, size_element);
 
-	return (lp - arr) / size_element;
+	return (l - arr) / size_element;
 }
 
 static void quickSortCore(char *arr, char *temp, size_t left, size_t right, size_t size_element, compareFunc compare) {
 	if (right - left > THRESHOLD) {
 		size_t mid = partition(arr, temp, left, right, size_element, compare);
-		quickSortCore(arr, temp, left, mid - 1, size_element, compare);
+		size_t i = mid;
+		for (; compare(arr + i * size_element, arr + (i - 1) * size_element) == 0 && i > left + 1; --i);
+		quickSortCore(arr, temp, left, i - 1, size_element, compare);
 		quickSortCore(arr, temp, mid + 1, right, size_element, compare);
 	}
 	else {

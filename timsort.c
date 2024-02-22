@@ -9,13 +9,13 @@ typedef struct Run {
 	size_t right;
 } Run;
 
-typedef struct Stack {
+typedef struct RunStack {
 	Run *stack;
 	int size;
 	int top;
-} Stack;
+} RunStack;
 
-static void initStack(Stack *stack) {
+static void initRunStack(RunStack *stack) {
 	stack->stack = malloc(sizeof(Run) * MIN_STACK_SIZE);
 	if (stack->stack == NULL)
 		exit(EXIT_FAILURE);
@@ -23,7 +23,7 @@ static void initStack(Stack *stack) {
 	stack->top = -1;
 }
 
-static void resize(Stack *stack, int size) {
+static void resizeRunStack(RunStack *stack, int size) {
 	Run *temp;
 
 	temp = realloc(stack->stack, sizeof(Run) * size);
@@ -33,14 +33,14 @@ static void resize(Stack *stack, int size) {
 	stack->size = size;
 }
 
-static void push(Stack *stack, Run run) {
+static void pushRunStack(RunStack *stack, Run run) {
 	if (++stack->top >= stack->size)
-		resize(stack, stack->size * 2);
+		resizeRunStack(stack, stack->size * 2);
 
 	stack->stack[stack->top] = run;
 }
 
-static Run pop(Stack *stack) {
+static Run popRunStack(RunStack *stack) {
 	return stack->stack[stack->top--];
 }
 
@@ -113,17 +113,17 @@ static Run mergeRun(char *arr, char *temp, Run left, Run right, size_t size_elem
 }
 
 void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc compare) {
-	Stack stack;
+	RunStack stack;
 	Run run;
 	Run r1, r2, r3, r4;
 	size_t min_run_size;
 	char *array;
 	char *temp;
 	int boolean;
-	char *p, *limit;
 
-	if (num_elements > 1) {
-		initStack(&stack);
+	const size_t limit = num_elements - 1;
+	if (limit > 0) {
+		initRunStack(&stack);
 		array = (char *)arr;
 		min_run_size = num_elements;
 		while (min_run_size > THRESHOLD) {
@@ -132,25 +132,20 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 		temp = malloc(size_element * MAX(num_elements >> 1, min_run_size));
 
 		run.left = 0;
-		run.right = MIN(min_run_size - 1, num_elements - 1);
-		limit = array + (num_elements - 1) * size_element;
+		run.right = MIN(min_run_size - 1, limit);
 		while (1) {
-			p = array + (run.left * size_element);
-			if (p < limit) {
-				boolean = compare(p, p + size_element) <= 0;
+			if (run.left < limit) {
+				boolean = compare(array + run.left * size_element, array + (run.left + 1) * size_element) <= 0;
 				insertAsDesSort(array, temp, run.left, run.right, boolean, size_element, compare);
 
-				p = array + (run.right * size_element);
 				if (boolean) {
-					while (p < limit && compare(p, p + size_element) <= 0) {
+					while (run.right < limit && compare(array + run.right * size_element, array + (run.right + 1) * size_element) <= 0) {
 						++run.right;
-						p += size_element;
 					}
 				}
 				else {
-					while (p < limit && compare(p, p + size_element) > 0) {
+					while (run.right < limit && compare(array + run.right * size_element, array + (run.right + 1) * size_element) > 0) {
 						++run.right;
-						p += size_element;
 					}
 				}
 
@@ -158,7 +153,7 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 					reverse(array, temp, run, size_element);
 				}
 			}
-			push(&stack, run);
+			pushRunStack(&stack, run);
 
 			while (stack.top >= 1) {
 				r1 = stack.stack[stack.top];
@@ -191,18 +186,18 @@ void timSort(void *arr, size_t num_elements, size_t size_element, compareFunc co
 				}
 			}
 
-			if (p < limit) {
+			if (run.right < limit) {
 				run.left = run.right + 1;
-				run.right = MIN(run.right + min_run_size, num_elements - 1);
+				run.right = MIN(run.right + min_run_size, limit);
 			}
 			else {
 				break;
 			}
 		}
 
-		run = pop(&stack);
+		run = popRunStack(&stack);
 		while (stack.top >= 0) {
-			run = mergeRun(array, temp, pop(&stack), run, size_element, compare);
+			run = mergeRun(array, temp, popRunStack(&stack), run, size_element, compare);
 		}
 
 		free(stack.stack);
