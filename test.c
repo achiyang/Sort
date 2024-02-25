@@ -8,6 +8,8 @@
 #include "dualpivot.h"
 #include "heapsort.h"
 #include "insertionsort.h"
+#include "bubblesort.h"
+#include "selectionsort.h"
 
 #define ARRAY_SIZE 5000000
 #define REPEAT 10
@@ -125,6 +127,8 @@ static void test_run() {
 }
 
 int main() {
+	// test_add(bubbleSort, "Bubble sort");
+	// test_add(selectionSort, "Selection sort");
 	// test_add(insertionSort, "Insertion sort");
 	test_add(qsort, "qsort");
 	test_add(timSort, "Tim sort");

@@ -25,6 +25,12 @@
     <Filter Include="Sort\Insertion sort">
       <UniqueIdentifier>{65d09462-efc4-4d40-96de-9e0d1e3a9d4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sort\Bubble sort">
+      <UniqueIdentifier>{98038293-9b46-4aed-a198-ca21703450e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sort\Selection sort">
+      <UniqueIdentifier>{f580b66b-d0d2-4d8c-9302-e29dcf26503f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h">
@@ -51,6 +57,12 @@
     <ClInclude Include="insertionsort.h">
       <Filter>Sort\Insertion sort</Filter>
     </ClInclude>
+    <ClInclude Include="bubblesort.h">
+      <Filter>Sort\Bubble sort</Filter>
+    </ClInclude>
+    <ClInclude Include="selectionsort.h">
+      <Filter>Sort\Selection sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
@@ -76,6 +88,12 @@
     </ClCompile>
     <ClCompile Include="insertionsort.c">
       <Filter>Sort\Insertion sort</Filter>
+    </ClCompile>
+    <ClCompile Include="bubblesort.c">
+      <Filter>Sort\Bubble sort</Filter>
+    </ClCompile>
+    <ClCompile Include="selectionsort.c">
+      <Filter>Sort\Selection sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

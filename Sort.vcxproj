@@ -127,21 +127,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="bubblesort.h" />
     <ClInclude Include="dualpivot.h" />
     <ClInclude Include="heapsort.h" />
     <ClInclude Include="insertionsort.h" />
     <ClInclude Include="mergesort.h" />
     <ClInclude Include="quicksort.h" />
+    <ClInclude Include="selectionsort.h" />
     <ClInclude Include="sorttypes.h" />
     <ClInclude Include="sortutils.h" />
     <ClInclude Include="timsort.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bubblesort.c" />
     <ClCompile Include="dualpivot.c" />
     <ClCompile Include="heapsort.c" />
     <ClCompile Include="insertionsort.c" />
     <ClCompile Include="mergesort.c" />
     <ClCompile Include="quicksort.c" />
+    <ClCompile Include="selectionsort.c" />
     <ClCompile Include="sortutils.c" />
     <ClCompile Include="test.c" />
     <ClCompile Include="timsort.c" />
