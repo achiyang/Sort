@@ -34,9 +34,9 @@ typedef struct Test {
 	int repeat;
 } Test;
 
-Test *createTest();
+Test *create_test();
 
-void freeTest(Test **testRef);
+void free_test(Test **testRef);
 
 void add_sort(Test *test, char *name, sortFunc sort);
 

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "sorttest.h"
 #include "timsort.h"
@@ -63,8 +64,38 @@ static void initIntSame(void *arr, size_t len) {
 	}
 }
 
+static void calculateRank(Test *test) {
+	int *rank = malloc(sizeof(int) * test->sorts_cnt);
+	if (rank == NULL)
+		exit(EXIT_FAILURE);
+
+	for (int i = 0; i < test->arrays_cnt; i++) {
+		for (int j = 0; j < test->sorts_cnt; j++) {
+			rank[j] = j;
+		}
+
+		for (int j = test->sorts_cnt; j > 1; j--) {
+			for (int k = 1; k < j; k++) {
+				if (test->sorts[rank[k]].total_times[i] < test->sorts[rank[k - 1]].total_times[i]) {
+					int temp = rank[k];
+					rank[k] = rank[k - 1];
+					rank[k - 1] = temp;
+				}
+			}
+		}
+
+		printf("\n%s\n\n", test->arrays[i].name);
+		for (int j = 0; j < test->sorts_cnt; j++) {
+			printf("%d %-18s%g\n", j + 1, test->sorts[rank[j]].name, (double)test->sorts[rank[j]].total_times[i] / test->repeat);
+		}
+		printf("\n");
+	}
+
+	free(rank);
+}
+
 int main() {
-	Test *test = createTest();
+	Test *test = create_test();
 
 	// add_sort(test, "Bubble sort", bubbleSort);
 	// add_sort(test, "Selection sort", selectionSort);
@@ -85,7 +116,9 @@ int main() {
 
 	test_run(test, 10);
 
-	freeTest(&test);
+	calculateRank(test);
+
+	free_test(&test);
 
 	return 0;
 }

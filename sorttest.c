@@ -16,7 +16,7 @@ static int isSorted(void *arr, size_t num_elements, size_t size_element, compare
 	return 1;
 }
 
-Test *createTest() {
+Test *create_test() {
 	Test *test = malloc(sizeof(Test));
 	if (test == NULL)
 		exit(EXIT_FAILURE);
@@ -32,7 +32,7 @@ Test *createTest() {
 	return test;
 }
 
-void freeTest(Test **testRef) {
+void free_test(Test **testRef) {
 	Test *test = *testRef;
 
 	if (test != NULL) {
