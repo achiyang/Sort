@@ -30,6 +30,8 @@ typedef struct Test {
 
 	size_t arr_size;
 	void *arr;
+
+	int repeat;
 } Test;
 
 Test *createTest();

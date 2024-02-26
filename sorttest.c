@@ -27,6 +27,7 @@ Test *createTest() {
 	test->arrays = NULL;
 	test->arr_size = 0;
 	test->arr = NULL;
+	test->repeat = 0;
 
 	return test;
 }
@@ -94,6 +95,7 @@ void test_run(Test *test, int repeat) {
 		test->sorts[i].total_times = temp;
 	}
 
+	test->repeat = repeat;
 	for (int t = 0; t < repeat; t++) {
 		for (int i = 0; i < test->sorts_cnt; i++) {
 			for (int j = 0; j < test->arrays_cnt; j++) {
