@@ -34,10 +34,6 @@ typedef struct Test {
 	int repeat;
 } Test;
 
-Test *create_test();
-
-void free_test(Test **testRef);
-
 void add_sort(Test *test, char *name, sortFunc sort);
 
 void add_arr(Test *test, char *name, initArrayFunc initArray, size_t num_elements, size_t size_element, compareFunc compare);
