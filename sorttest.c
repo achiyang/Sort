@@ -4,6 +4,18 @@
 #include <time.h>
 #include "sorttest.h"
 
+static int isSorted(void *arr, size_t num_elements, size_t size_element, compareFunc compare) {
+	char *array = (char *)arr;
+
+	for (size_t i = 1; i < num_elements; i++) {
+		if (compare(array + i * size_element, array + (i - 1) * size_element) < 0) {
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
 Test *createTest() {
 	Test *test = malloc(sizeof(Test));
 	if (test == NULL)
@@ -74,7 +86,6 @@ void add_arr(Test *test, char *name, initArrayFunc initArray, size_t num_element
 void test_run(Test *test, int repeat) {
 	srand((unsigned)time(0));
 
-	int t = repeat;
 	for (int i = 0; i < test->sorts_cnt; i++) {
 		void *temp = realloc(test->sorts[i].total_times, test->arrays_cnt * sizeof(size_t));
 		if (temp == NULL)
@@ -83,7 +94,7 @@ void test_run(Test *test, int repeat) {
 		test->sorts[i].total_times = temp;
 	}
 
-	while (t--) {
+	for (int t = 0; t < repeat; t++) {
 		for (int i = 0; i < test->sorts_cnt; i++) {
 			for (int j = 0; j < test->arrays_cnt; j++) {
 				test->arrays[j].initArray(test->arr, test->arrays[j].num_elements);
@@ -92,8 +103,14 @@ void test_run(Test *test, int repeat) {
 				test->sorts[i].sort(test->arr, test->arrays[j].num_elements, test->arrays[j].size_element, test->arrays[j].compare);
 				clock_t end = clock();
 
-				printf("%-18s%-20s%hd\n", test->sorts[i].name, test->arrays[j].name, end - start);
-				test->sorts[i].total_times[j] += end - start;
+				if (isSorted(test->arr, test->arrays[j].num_elements, test->arrays[j].size_element, test->arrays[j].compare)) {
+					printf("%-18s%-20s%hd\n", test->sorts[i].name, test->arrays[j].name, end - start);
+					test->sorts[i].total_times[j] += end - start;
+				}
+				else {
+					printf("%-18s%-20sfailed\n", test->sorts[i].name, test->arrays[j].name);
+					return;
+				}
 			}
 			printf("\n");
 		}
