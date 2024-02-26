@@ -136,6 +136,7 @@
     <ClInclude Include="selectionsort.h" />
     <ClInclude Include="sorttypes.h" />
     <ClInclude Include="sortutils.h" />
+    <ClInclude Include="sorttest.h" />
     <ClInclude Include="timsort.h" />
   </ItemGroup>
   <ItemGroup>
@@ -143,11 +144,12 @@
     <ClCompile Include="dualpivot.c" />
     <ClCompile Include="heapsort.c" />
     <ClCompile Include="insertionsort.c" />
+    <ClCompile Include="main.c" />
     <ClCompile Include="mergesort.c" />
     <ClCompile Include="quicksort.c" />
     <ClCompile Include="selectionsort.c" />
     <ClCompile Include="sortutils.c" />
-    <ClCompile Include="test.c" />
+    <ClCompile Include="sorttest.c" />
     <ClCompile Include="timsort.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

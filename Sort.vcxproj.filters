@@ -63,12 +63,15 @@
     <ClInclude Include="selectionsort.h">
       <Filter>Sort\Selection sort</Filter>
     </ClInclude>
+    <ClInclude Include="sorttest.h">
+      <Filter>test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
       <Filter>Sort\Merge sort</Filter>
     </ClCompile>
-    <ClCompile Include="test.c">
+    <ClCompile Include="sorttest.c">
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="timsort.c">
@@ -94,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="selectionsort.c">
       <Filter>Sort\Selection sort</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
