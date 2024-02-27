@@ -34,6 +34,9 @@
     <Filter Include="Sort\Radix sort">
       <UniqueIdentifier>{56188eab-5b8a-480e-82a0-9bc1d2307c04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sort\Tree sort">
+      <UniqueIdentifier>{aac4f944-0f83-47db-86dd-a4313fa9aff8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h">
@@ -72,6 +75,12 @@
     <ClInclude Include="radixsort.h">
       <Filter>Sort\Radix sort</Filter>
     </ClInclude>
+    <ClInclude Include="treesort.h">
+      <Filter>Sort\Tree sort</Filter>
+    </ClInclude>
+    <ClInclude Include="rbtree.h">
+      <Filter>Sort\Tree sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
@@ -109,6 +118,12 @@
     </ClCompile>
     <ClCompile Include="radixsort.c">
       <Filter>Sort\Radix sort</Filter>
+    </ClCompile>
+    <ClCompile Include="treesort.c">
+      <Filter>Sort\Tree sort</Filter>
+    </ClCompile>
+    <ClCompile Include="rbtree.c">
+      <Filter>Sort\Tree sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

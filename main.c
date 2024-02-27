@@ -1,19 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "sorttest.h"
+#include "bubblesort.h"
+#include "selectionsort.h"
+#include "insertionsort.h"
 #include "timsort.h"
 #include "mergesort.h"
 #include "quicksort.h"
 #include "dualpivot.h"
-#include "heapsort.h"
-#include "insertionsort.h"
-#include "bubblesort.h"
-#include "selectionsort.h"
 #include "radixsort.h"
+#include "treesort.h"
+#include "heapsort.h"
 
 /* sortFunc 구조가 아닌 intRadixSort를 sortFunc으로 만들기 위해 */
 static void radixSort(void *arr, size_t num_elements, size_t size_element, compareFunc compare) {
-	intRadixSort((int *)arr, num_elements, 1626); // 부호 없는 float의 정렬도 가능함
+	intRadixSort((int *)arr, num_elements, 1626); // n ^ 3 >= UINT_MAX 인 가장 작은 n이 1626
 }
 
 static int compareFloat(const void *a, const void *b) {
@@ -106,12 +107,13 @@ int main() {
 	// add_sort(test, "Bubble sort", bubbleSort);
 	// add_sort(test, "Selection sort", selectionSort);
 	// add_sort(test, "Insertion sort", insertionSort);
-	add_sort(test, "Radix sort", radixSort);
 	add_sort(test, "qsort", qsort);
 	add_sort(test, "Tim sort", timSort);
 	add_sort(test, "Merge sort", mergeSort);
 	add_sort(test, "Quick sort", quickSort);
 	add_sort(test, "Dual-Pivot", dualPivotQuickSort);
+	add_sort(test, "Radix sort", radixSort);
+	add_sort(test, "Tree sort", treeSort);
 	add_sort(test, "Heap sort", heapSort);
 
 	const size_t arr_len = 5000000;
