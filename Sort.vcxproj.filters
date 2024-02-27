@@ -31,6 +31,9 @@
     <Filter Include="Sort\Selection sort">
       <UniqueIdentifier>{f580b66b-d0d2-4d8c-9302-e29dcf26503f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sort\Radix sort">
+      <UniqueIdentifier>{56188eab-5b8a-480e-82a0-9bc1d2307c04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h">
@@ -66,6 +69,9 @@
     <ClInclude Include="sorttest.h">
       <Filter>test</Filter>
     </ClInclude>
+    <ClInclude Include="radixsort.h">
+      <Filter>Sort\Radix sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
@@ -100,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="main.c">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="radixsort.c">
+      <Filter>Sort\Radix sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

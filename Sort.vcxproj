@@ -133,6 +133,7 @@
     <ClInclude Include="insertionsort.h" />
     <ClInclude Include="mergesort.h" />
     <ClInclude Include="quicksort.h" />
+    <ClInclude Include="radixsort.h" />
     <ClInclude Include="selectionsort.h" />
     <ClInclude Include="sorttypes.h" />
     <ClInclude Include="sortutils.h" />
@@ -147,6 +148,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="mergesort.c" />
     <ClCompile Include="quicksort.c" />
+    <ClCompile Include="radixsort.c" />
     <ClCompile Include="selectionsort.c" />
     <ClCompile Include="sortutils.c" />
     <ClCompile Include="sorttest.c" />
