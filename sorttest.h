@@ -1,7 +1,11 @@
 #ifndef SORTTEST_H
 #define SORTTEST_H
 
+#include <time.h>
 #include "sorttypes.h"
+
+#define SORTNAME_MAXLEN 18
+#define ARRAYNAME_MAXLEN 20
 
 typedef void (*sortFunc)(void *arr, size_t num_elements, size_t size_element, compareFunc compare);
 
@@ -10,7 +14,6 @@ typedef void (*initArrayFunc)(void *arr, size_t len);
 struct SortData {
 	char *name;
 	sortFunc sort;
-	size_t *total_times;
 };
 
 struct ArrayData {
@@ -30,6 +33,8 @@ typedef struct Test {
 
 	size_t arr_size;
 	void *arr;
+
+	clock_t ***result; // result[sort][array][repeat]
 
 	int repeat;
 } Test;

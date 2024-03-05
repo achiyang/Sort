@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include "sorttest.h"
 
 static int isSorted(void *arr, size_t num_elements, size_t size_element, compareFunc compare) {
@@ -16,6 +15,21 @@ static int isSorted(void *arr, size_t num_elements, size_t size_element, compare
 	return 1;
 }
 
+static void freeResult(Test *test) {
+	if (test->result == NULL)
+		return;
+
+	for (int i = 0; i < test->sorts_cnt; i++) {
+		for (int j = 0; j < test->arrays_cnt; j++) {
+			free(test->result[i][j]);
+		}
+		free(test->result[i]);
+	}
+	free(test->result);
+
+	test->result = NULL;
+}
+
 Test *create_test() {
 	Test *test = malloc(sizeof(Test));
 	if (test == NULL)
@@ -27,6 +41,7 @@ Test *create_test() {
 	test->arrays = NULL;
 	test->arr_size = 0;
 	test->arr = NULL;
+	test->result = NULL;
 	test->repeat = 0;
 
 	return test;
@@ -36,9 +51,7 @@ void free_test(Test **testRef) {
 	Test *test = *testRef;
 
 	if (test != NULL) {
-		for (int i = 0; i < test->sorts_cnt; i++) {
-			free(test->sorts[i].total_times);
-		}
+		freeResult(test);
 		free(test->sorts);
 		free(test->arrays);
 		free(test->arr);
@@ -56,7 +69,6 @@ void add_sort(Test *test, char *name, sortFunc sort) {
 
 	test->sorts[test->sorts_cnt].name = name;
 	test->sorts[test->sorts_cnt].sort = sort;
-	test->sorts[test->sorts_cnt].total_times = NULL;
 
 	test->sorts_cnt++;
 }
@@ -73,13 +85,8 @@ void add_arr(Test *test, char *name, initArrayFunc initArray, size_t num_element
 	test->arrays[test->arrays_cnt].size_element = size_element;
 	test->arrays[test->arrays_cnt].compare = compare;
 
-	if (size_element * num_elements > test->arr_size) {
+	if (size_element * num_elements > test->arr_size)
 		test->arr_size = size_element * num_elements;
-		void *temp = realloc(test->arr, test->arr_size);
-		if (temp == NULL)
-			exit(EXIT_FAILURE);
-		test->arr = temp;
-	}
 
 	test->arrays_cnt++;
 }
@@ -87,15 +94,33 @@ void add_arr(Test *test, char *name, initArrayFunc initArray, size_t num_element
 void test_run(Test *test, int repeat) {
 	srand((unsigned)time(0));
 
-	for (int i = 0; i < test->sorts_cnt; i++) {
-		void *temp = realloc(test->sorts[i].total_times, test->arrays_cnt * sizeof(size_t));
-		if (temp == NULL)
-			exit(EXIT_FAILURE);
-		memset(temp, 0, test->arrays_cnt * sizeof(size_t));
-		test->sorts[i].total_times = temp;
+	test->repeat = repeat;
+
+	if (test->result != NULL) {
+		freeResult(test);
 	}
 
-	test->repeat = repeat;
+	test->result = (clock_t ***)malloc(test->sorts_cnt * sizeof(clock_t **));
+	if (test->result == NULL)
+		exit(EXIT_FAILURE);
+
+	for (int i = 0; i < test->sorts_cnt; i++) {
+		test->result[i] = (clock_t **)malloc(test->arrays_cnt * sizeof(clock_t *));
+		if (test->result[i] == NULL)
+			exit(EXIT_FAILURE);
+
+		for (int j = 0; j < test->arrays_cnt; j++) {
+			test->result[i][j] = (clock_t *)calloc(test->repeat, sizeof(clock_t));
+			if (test->result[i][j] == NULL)
+				exit(EXIT_FAILURE);
+		}
+	}
+
+	void *temp = realloc(test->arr, test->arr_size);
+	if (temp == NULL)
+		exit(EXIT_FAILURE);
+	test->arr = temp;
+
 	for (int t = 0; t < repeat; t++) {
 		for (int i = 0; i < test->sorts_cnt; i++) {
 			for (int j = 0; j < test->arrays_cnt; j++) {
@@ -106,23 +131,16 @@ void test_run(Test *test, int repeat) {
 				clock_t end = clock();
 
 				if (isSorted(test->arr, test->arrays[j].num_elements, test->arrays[j].size_element, test->arrays[j].compare)) {
-					printf("%-18s%-20s%hd\n", test->sorts[i].name, test->arrays[j].name, end - start);
-					test->sorts[i].total_times[j] += end - start;
+					printf("%-*s%-*s%hd\n", SORTNAME_MAXLEN, test->sorts[i].name, ARRAYNAME_MAXLEN, test->arrays[j].name, end - start);
+					test->result[i][j][t] = end - start;
 				}
 				else {
-					printf("%-18s%-20sfailed\n", test->sorts[i].name, test->arrays[j].name);
+					printf("%-*s%-*sfailed\n", SORTNAME_MAXLEN, test->sorts[i].name, ARRAYNAME_MAXLEN, test->arrays[j].name);
 					return;
 				}
 			}
 			printf("\n");
 		}
 		printf("----------------------------------------------\n\n");
-	}
-
-	for (int i = 0; i < test->sorts_cnt; i++) {
-		for (int j = 0; j < test->arrays_cnt; j++) {
-			printf("%-18s%-20savg  %g\n", test->sorts[i].name, test->arrays[j].name, (double)test->sorts[i].total_times[j] / repeat);
-		}
-		printf("\n");
 	}
 }

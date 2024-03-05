@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "sorttest.h"
 #include "bubblesort.h"
 #include "selectionsort.h"
@@ -71,10 +72,52 @@ static void initIntSame(void *arr, size_t len) {
 	}
 }
 
+static void calculateAverage(Test *test) {
+	for (int i = 0; i < test->sorts_cnt; i++) {
+		for (int j = 0; j < test->arrays_cnt; j++) {
+			double avg = 0;
+			for (int t = 0; t < test->repeat; t++) {
+				avg += test->result[i][j][t];
+			}
+			avg /= test->repeat;
+
+			double variance = 0;
+			for (int t = 0; t < test->repeat; t++) {
+				variance += pow(avg - test->result[i][j][t], 2);
+			}
+			if (test->repeat > 2) {
+				variance /= (test->repeat - 1);
+			}
+
+			double std_error = sqrt(variance) / sqrt(test->repeat);
+			printf("%-*s%-*s  %g ¡¾ %g\n", SORTNAME_MAXLEN, test->sorts[i].name, ARRAYNAME_MAXLEN, test->arrays[j].name, avg, std_error);
+		}
+		printf("\n");
+	}
+}
+
 static void calculateRank(Test *test) {
-	int *rank = malloc(sizeof(int) * test->sorts_cnt);
+	int *rank = (int *)malloc(test->sorts_cnt * sizeof(int));
 	if (rank == NULL)
 		exit(EXIT_FAILURE);
+
+	size_t **result = (size_t **)malloc(test->sorts_cnt * sizeof(size_t *));
+	if (result == NULL)
+		exit(EXIT_FAILURE);
+
+	for (int i = 0; i < test->sorts_cnt; i++) {
+		result[i] = (size_t *)calloc(test->arrays_cnt, sizeof(size_t));
+		if (result[i] == NULL)
+			exit(EXIT_FAILURE);
+	}
+
+	for (int i = 0; i < test->sorts_cnt; i++) {
+		for (int j = 0; j < test->arrays_cnt; j++) {
+			for (int t = 0; t < test->repeat; t++) {
+				result[i][j] += test->result[i][j][t];
+			}
+		}
+	}
 
 	for (int i = 0; i < test->arrays_cnt; i++) {
 		for (int j = 0; j < test->sorts_cnt; j++) {
@@ -83,7 +126,7 @@ static void calculateRank(Test *test) {
 
 		for (int j = test->sorts_cnt; j > 1; j--) {
 			for (int k = 1; k < j; k++) {
-				if (test->sorts[rank[k]].total_times[i] < test->sorts[rank[k - 1]].total_times[i]) {
+				if (result[rank[k]][i] < result[rank[k - 1]][i]) {
 					int temp = rank[k];
 					rank[k] = rank[k - 1];
 					rank[k - 1] = temp;
@@ -93,11 +136,15 @@ static void calculateRank(Test *test) {
 
 		printf("\n%s\n\n", test->arrays[i].name);
 		for (int j = 0; j < test->sorts_cnt; j++) {
-			printf("%d %-18s%g\n", j + 1, test->sorts[rank[j]].name, (double)test->sorts[rank[j]].total_times[i] / test->repeat);
+			printf("%d %-*s%g\n", j + 1, SORTNAME_MAXLEN, test->sorts[rank[j]].name, (double)result[rank[j]][i] / test->repeat);
 		}
 		printf("\n");
 	}
 
+	for (int i = 0; i < test->sorts_cnt; i++) {
+		free(result[i]);
+	}
+	free(result);
 	free(rank);
 }
 
@@ -125,6 +172,7 @@ int main() {
 
 	test_run(test, 10);
 
+	calculateAverage(test);
 	calculateRank(test);
 
 	free_test(&test);
