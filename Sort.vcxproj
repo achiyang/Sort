@@ -132,6 +132,7 @@
     <ClInclude Include="heapsort.h" />
     <ClInclude Include="insertionsort.h" />
     <ClInclude Include="mergesort.h" />
+    <ClInclude Include="multithread.h" />
     <ClInclude Include="quicksort.h" />
     <ClInclude Include="radixsort.h" />
     <ClInclude Include="rbtree.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="insertionsort.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="mergesort.c" />
+    <ClCompile Include="multithread.c" />
     <ClCompile Include="quicksort.c" />
     <ClCompile Include="radixsort.c" />
     <ClCompile Include="rbtree.c" />

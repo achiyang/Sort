@@ -12,6 +12,7 @@
 #include "radixsort.h"
 #include "treesort.h"
 #include "heapsort.h"
+#include "multithread.h"
 
 /* sortFunc 구조가 아닌 intRadixSort를 sortFunc으로 만들기 위해 */
 static void radixSort(void *arr, size_t num_elements, size_t size_element, compareFunc compare) {
@@ -162,6 +163,7 @@ int main() {
 	add_sort(test, "Radix sort", radixSort);
 	add_sort(test, "Tree sort", treeSort);
 	add_sort(test, "Heap sort", heapSort);
+	add_sort(test, "Multi sort", multiThreadSort);
 
 	const size_t arr_len = 5000000;
 	add_arr(test, "int random", initIntRandom, arr_len, sizeof(int), compareInt);

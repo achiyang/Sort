@@ -37,6 +37,9 @@
     <Filter Include="Sort\Tree sort">
       <UniqueIdentifier>{aac4f944-0f83-47db-86dd-a4313fa9aff8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sort\Multi-thread sort">
+      <UniqueIdentifier>{884b4fd9-6951-4ae6-b243-51dc280365fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mergesort.h">
@@ -81,6 +84,9 @@
     <ClInclude Include="rbtree.h">
       <Filter>Sort\Tree sort</Filter>
     </ClInclude>
+    <ClInclude Include="multithread.h">
+      <Filter>Sort\Multi-thread sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mergesort.c">
@@ -124,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="rbtree.c">
       <Filter>Sort\Tree sort</Filter>
+    </ClCompile>
+    <ClCompile Include="multithread.c">
+      <Filter>Sort\Multi-thread sort</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
